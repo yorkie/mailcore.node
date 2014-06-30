@@ -38,6 +38,8 @@ imap.once('connect', function() {
 
 ```
 
+If you want to get more details, you could go to [API.md](docs/API.md).
+
 ### TODO
 
 * API `imap.seach`

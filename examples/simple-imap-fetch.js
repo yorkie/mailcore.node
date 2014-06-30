@@ -9,10 +9,10 @@ var imap = new IMAPSession(993, 'imap.gmail.com', {
 });
 
 imap.connect();
-imap.on('error', function(err) {
+imap.once('error', function(err) {
   throw err;
 });
-imap.on('connect', function() {
+imap.once('connect', function() {
   console.log('connected');
   imap.select('INBOX', function(inbox) {
     console.log(inbox);

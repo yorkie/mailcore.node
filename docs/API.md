@@ -35,14 +35,13 @@ to avoid memroy leaks.
 * port Number, the port number of IMAP server
 * hostname String, the hostname of IMAP server
 * option Object, you config the authenticate option here
-  * `option.secure` String, the value of `ssl`, `starttls` and `none`(null)
-  * `option.auth` Object, the authenticate option you should defined
-    * `option.auth.username`, String
-    * `option.auth.password`, String, if you provide this field, then use `LOGIN` to authenticate, otherwise do `AUTHENTICATE`
-    * `option.auth.accessToken`, String, used by `AUTHENTICATE` command
-    * `option.auth.refreshToken`, String reversed
-    * `option.auth.clientId`, String reversed
-    * `option.auth.clientSecret`, String reversed
+  * `option.secure` String, the value of `ssl`, `starttls` and `none`. Default value is none.
+  * `option.auth.username`, String
+  * `option.auth.password`, String, if you provide this field, then use `LOGIN` to authenticate, otherwise do `AUTHENTICATE`
+  * `option.auth.accessToken`, String, used by `AUTHENTICATE` command
+  * `option.auth.refreshToken`, String reversed
+  * `option.auth.clientId`, String reversed
+  * `option.auth.clientSecret`, String reversed
 
 Constructs an instance of IMAPSession with these 3 specified arguments, and an simple example for calling this constructor just is following:
 
@@ -75,11 +74,13 @@ The `option.auth` field before just use the plain to request the authentication,
 
 #### imap.connect([callback])
 
-Start to create the connection to IMAP server, once your account has been authenticated/loged in, program would call `callback` and trigger the `connect` event.
+Start to create the connection to IMAP server, once your account has been authenticated/loged in, `callback` will be called and the `connect` event will be emitted.
 
-Theese `callback` and `connect` functions are zero-arguments function, then feel free to call them.
+These `callback` and `connect` functions are zero-arguments function: `function() { /* ... */ }`
 
 #### imap.disconnect([callback])
+
+* callback Function, `function() { /* ... */ }`
 
 End this session.
 
@@ -94,10 +95,24 @@ Select a folder(mailbox).
 
 * start Number|String
 * end Number|String
-* option Number|Object|null TODO
+* option Array|String, default value: `["uid", "flags", "headers", "internal-date"]`
 * callback Function
 
-Fetches the messages from you selected folder.
+Fetches the messages from your selected folder. The element of `option` array could be the below listed string:
+
+* uid
+* flags
+* headers
+* structure
+* internal-date
+* full-headers
+* header-subject
+* gmail-labels
+* gmail-message-id
+* gmail-thread-id
+* size
+
+And the element of `option` could also be custom header string like `X-Mailer`, `X-Envelope-Sender`, `X-Mailing-List` and etc.
 
 #### imap.search(query, callback)
 
@@ -106,11 +121,11 @@ Fetches the messages from you selected folder.
 
 The `SEARCH` command implementation.
 
-#### imap.appendMessage(folder, data, flags, callback)
+#### imap.appendMessage(folder, data, [flags,] callback)
 
 * folder String
 * data String, rfc822 message data
-* flags Array
+* flags Array, the element of this array should be a string of `answered`, `flagged`, `deleted`, `seen` and `draft`.
 * callback Function
 
 Append message to you specified folder.
